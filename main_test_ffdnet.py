@@ -8,6 +8,7 @@ import torch
 
 from utils import utils_logger
 from utils import utils_image as util
+from noise_estimation_utils import *
 
 
 '''
@@ -148,6 +149,13 @@ def main():
             img_L += np.random.normal(0, noise_level_img/255., img_L.shape)
             if use_clip:
                 img_L = util.uint2single(util.single2uint(img_L))
+
+        # *********************************************************************************************
+        # testing out noise estimators:
+        noise_level_model = int(estimate_noise_pca(np.squeeze(img_L)) * 255)
+        print(f"noise level input is: {noise_level_img}")
+        print(f"noise level found by estimate_noise_local_variance is: {noise_level_model}")
+        # *********************************************************************************************
 
         util.imshow(util.single2uint(img_L), title='Noisy image with noise level {}'.format(noise_level_img)) if show_img else None
 
